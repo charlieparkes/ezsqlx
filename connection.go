@@ -70,7 +70,7 @@ func (settings *ConnectionSettings) Ping() error {
 }
 
 // Initialize databases given ConnectionStrings
-func Init(databases map[string]*ConnectionSettings) (map[string]*sqlx.DB, func() error) {
+func InitConnections(databases map[string]*ConnectionSettings) (map[string]*sqlx.DB, func() error) {
 	connections := map[string]*sqlx.DB{}
 
 	for name, settings := range databases {
