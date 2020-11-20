@@ -68,3 +68,30 @@ func (settings *ConnectionSettings) Ping() error {
 	}
 	return db.Ping()
 }
+
+// Initialize databases given ConnectionStrings
+func Init(databases map[string]*ConnectionSettings) (map[string]*sqlx.DB, func() error) {
+	connections := map[string]*sqlx.DB{}
+
+	for name, settings := range databases {
+		connections[name] = settings.Init()
+	}
+
+	return connections, func() error {
+		return CloseAll(connections)
+	}
+}
+
+func CloseAll(connections map[string]*sqlx.DB) error {
+	var err error
+	for name, db := range connections {
+		err = db.Close()
+		if err != nil {
+			log.WithFields(log.Fields{
+				"event": "FatalDBCloseError",
+				"error": err,
+			}).Error(fmt.Sprintf("Could not close %v database", name))
+		}
+	}
+	return err
+}
