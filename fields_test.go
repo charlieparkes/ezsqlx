@@ -7,9 +7,9 @@ import (
 )
 
 type DummyModel struct {
-	Foo int `db:"foo"`
-	Bar string `db:"bar"`
-	FooBar string `db:"wiz_bang"`
+	Foo     int    `db:"foo"`
+	Bar     string `db:"bar"`
+	FooBar  string `db:"wiz_bang"`
 	NotHere string
 }
 

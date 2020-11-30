@@ -87,10 +87,7 @@ func CloseAll(connections map[string]*sqlx.DB) error {
 	for name, db := range connections {
 		err = db.Close()
 		if err != nil {
-			log.WithFields(log.Fields{
-				"event": "FatalDBCloseError",
-				"error": err,
-			}).Error(fmt.Sprintf("Could not close %v database", name))
+			log.Fatal(fmt.Sprintf("Could not close %v database: %v", name, err))
 		}
 	}
 	return err
