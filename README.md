@@ -6,7 +6,8 @@
 
 * Insert
 * Update
-* Model Fields
+* Connection management
+* Get database fields from a struct
 
 ## Examples
 
@@ -70,3 +71,21 @@ _, err = Update(db, "foobar", updatedRow, where, []string{"id", "created"})
 fields := Fields(model)
 ```
 
+### Connections
+
+`ezsqlx.ConnectionSettings` abstracts away basic Postgres connection operations.
+
+###### Example
+
+```go
+cs := &ConnectionSettings{
+  Host: "localhost",
+  Port: "1234",
+  User: "postgres",
+  Password: "postgres",
+  Database: "my_database"
+}
+
+db := cs.Open()
+defer db.Close()
+```
