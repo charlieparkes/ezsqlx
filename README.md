@@ -15,10 +15,10 @@ Given a basic model struct, **ezsqlx** simplifies basic operations.
 
 ```go
 type FooBar struct {
-	Id      int        `db:"id"`
-	Message string     `db:"message"`
-	Flip    bool       `db:"flip"`
-	Created *time.Time `db:"created"`
+    Id      int        `db:"id"`
+    Message string     `db:"message"`
+    Flip    bool       `db:"flip"`
+    Created *time.Time `db:"created"`
 }
 ```
 
@@ -27,10 +27,10 @@ type FooBar struct {
 ###### Interface
 ```go
 Insert(
-  db *sqlx.DB,
-  table string,
-  model interface{},
-  excludedFields []string
+    db *sqlx.DB,
+    table string,
+    model interface{},
+    excludedFields []string
 ) (*sqlx.Rows, error)
 ```
 
@@ -45,11 +45,11 @@ rows, err := Insert(db, "foobar", newRow, []string{"id", "created"})
 ###### Interface
 ```go
 Update(
- 	db *sqlx.DB,
- 	table string,
- 	model interface{},
- 	where string,
- 	excludedFields []string
+    db *sqlx.DB,
+    table string,
+    model interface{},
+    where string,
+    excludedFields []string
 ) (sql.Result, error) 
 ```
 
@@ -65,7 +65,7 @@ _, err = Update(db, "foobar", updatedRow, where, []string{"id", "created"})
 ###### Interface
 ```go
 Fields(
-  values interface{}
+    values interface{}
 ) []string
 ```
 
@@ -81,11 +81,11 @@ fields := Fields(model)
 ###### Example
 ```go
 cs := &ConnectionSettings{
-  Host: "localhost",
-  Port: "1234",
-  User: "postgres",
-  Password: "postgres",
-  Database: "my_database"
+    Host: "localhost",
+    Port: "1234",
+    User: "postgres",
+    Password: "postgres",
+    Database: "my_database"
 }
 
 db := cs.Open()
