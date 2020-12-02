@@ -73,7 +73,7 @@ fields := Fields(model)
 
 ### Connections
 
-`ezsqlx.ConnectionSettings` abstracts away basic Postgres connection operations.
+`ezsqlx.ConnectionSettings` abstracts away basic Postgres connection operations. Check `connections.go` for a full list of helpers.
 
 ###### Example
 
