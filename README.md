@@ -28,7 +28,7 @@ type FooBar struct {
 >   table string,
 >   model interface{},
 >   excludedFields []string
-> )(*sqlx.Rows, error)
+> ) (*sqlx.Rows, error)
 > ```
 
 ###### Example
