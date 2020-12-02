@@ -9,7 +9,6 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/ory/dockertest/v3"
-	// "github.com/ory/dockertest/v3/docker"
 )
 
 type ConnectionSettings struct {
