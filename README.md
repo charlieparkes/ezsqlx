@@ -51,8 +51,9 @@ rows, err := Insert(db, "foobar", newRow, []string{"id", "created"})
 
 ###### Example
 ```go
-newRow := &FooBar{Id: 1, Message: "confused unga bunga"}
-_, err = Update(db, "foobar", foobar, fmt.Sprintf("id=%v",foobar.Id), []string{"id", "created"})
+updatedRow := &FooBar{Id: 1, Message: "pc master race", Flip: true}
+where := fmt.Sprintf("id=%v", updatedRow.Id)
+_, err = Update(db, "foobar", updatedRow, where, []string{"id", "created"})
 ```
 
 ### Fields
