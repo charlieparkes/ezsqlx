@@ -24,7 +24,7 @@ func TestInsert(t *testing.T) {
 	test.CreateDummyTable(db)
 
 	newRow := &test.FooBar{Message: "confused unga bunga"}
-	rows, err := Insert(db, "foobar", newRow, []string{"id"})
+	rows, err := Insert(db, "foobar", newRow, []string{"id", "created"})
 	assert.Nil(t, err)
 
 	foobar := &test.FooBar{}
