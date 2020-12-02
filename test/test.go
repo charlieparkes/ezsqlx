@@ -136,7 +136,7 @@ func CreateDummyTable(db *sqlx.DB) {
 		id SERIAL PRIMARY KEY,
 		message TEXT,
 		flip BOOL NOT NULL DEFAULT false,
-		created TIMESTAMP DEFAULT now()
+		created TIMESTAMP DEFAULT NOW()
 	)`)
 	tx.Commit()
 }
