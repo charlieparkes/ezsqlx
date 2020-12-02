@@ -1,6 +1,6 @@
 # ezsqlx
 
-**ezsqlx** is a library which provides helpers for `jmoiron/sqlx` which simplify basic database actions. **ezsqlx** will improve your experience without incurring the penalties of an ORM.
+**ezsqlx** is a library which provides helpers for `jmoiron/sqlx`. It's goal is to improve your experience without incurring the penalties of an ORM.
 
 ##### Features
 
