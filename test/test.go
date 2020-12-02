@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/docker/docker/pkg/namesgenerator"
 	_ "github.com/jackc/pgx/v4/stdlib"
@@ -120,4 +121,22 @@ func waitForPostgres(pool *dockertest.Pool, resource *dockertest.Resource, setti
 	}); err != nil {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
+}
+
+type FooBar struct {
+	Id      int        `db:"id"`
+	Message string     `db:"message"`
+	Flip    bool       `db:"flip"`
+	Created *time.Time `db:"created"`
+}
+
+func CreateDummyTable(db *sqlx.DB) {
+	tx := db.MustBegin()
+	tx.MustExec(`CREATE TABLE foobar (
+		id SERIAL PRIMARY KEY,
+		message TEXT,
+		flip BOOL NOT NULL DEFAULT false,
+		created TIMESTAMP DEFAULT now()
+	)`)
+	tx.Commit()
 }

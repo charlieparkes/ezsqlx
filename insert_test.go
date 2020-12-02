@@ -3,31 +3,11 @@ package ezsqlx
 import (
 	"log"
 	"testing"
-	"time"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/tovala/ezsqlx/test"
 )
-
-type FooBar struct {
-	Id      int        `db:"id"`
-	Message string     `db:"message"`
-	Flip    bool       `db:"flip"`
-	Created *time.Time `db:"created"`
-}
-
-func createTable(db *sqlx.DB) {
-	tx := db.MustBegin()
-	tx.MustExec(`CREATE TABLE foobar (
-		id SERIAL PRIMARY KEY,
-		message TEXT,
-		flip BOOL NOT NULL DEFAULT false,
-		created TIMESTAMP DEFAULT now()
-	)`)
-	tx.Commit()
-}
 
 func TestInsert(t *testing.T) {
 	var err error
@@ -41,13 +21,13 @@ func TestInsert(t *testing.T) {
 	assert.Nil(t, err)
 	defer db.Close()
 
-	createTable(db)
+	test.CreateDummyTable(db)
 
-	newRow := &FooBar{Message: "confused unga bunga"}
+	newRow := &test.FooBar{Message: "confused unga bunga"}
 	rows, err := Insert(db, "foobar", newRow, []string{"id"})
 	assert.Nil(t, err)
 
-	foobar := &FooBar{}
+	foobar := &test.FooBar{}
 	for rows.Rows.Next() {
 		err = rows.StructScan(foobar)
 		if err != nil {
@@ -72,20 +52,20 @@ func TestInsert(t *testing.T) {
 // 	assert.Nil(t, err)
 // 	defer db.Close()
 
-// 	createTable(db)
+// 	test.CreateDummyTable(db)
 
-// 	newRows := []FooBar{
-// 		FooBar{Message: "confused unga bunga"},
-// 		FooBar{Message: "the welfare of humanity is always the alibi of tyrants"},
+// 	newRows := []test.FooBar{
+// 		test.FooBar{Message: "confused unga bunga"},
+// 		test.FooBar{Message: "the welfare of humanity is always the alibi of tyrants"},
 // 	}
 
-// 	query := InsertManyQuery(db, "foobar", FooBar{}, []string{"id"})
+// 	query := InsertManyQuery(db, "foobar", test.FooBar{}, []string{"id"})
 // 	rows, err := db.NamedQuery(query, newRows)
 // 	assert.Nil(t, err)
 
-// 	scannedRows := []FooBar{}
+// 	scannedRows := []test.FooBar{}
 // 	for rows.Rows.Next() {
-// 		foobar := FooBar{}
+// 		foobar := test.FooBar{}
 // 		err = rows.StructScan(foobar)
 // 		if err != nil {
 // 			log.Fatalln(err)
