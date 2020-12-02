@@ -23,14 +23,16 @@ type FooBar struct {
 ```
 
 ### Insert
-> ```go
-> Insert(
->   db *sqlx.DB,
->   table string,
->   model interface{},
->   excludedFields []string
-> ) (*sqlx.Rows, error)
-> ```
+
+###### Interface
+```go
+Insert(
+  db *sqlx.DB,
+  table string,
+  model interface{},
+  excludedFields []string
+) (*sqlx.Rows, error)
+```
 
 ###### Example
 ```go
@@ -40,15 +42,16 @@ rows, err := Insert(db, "foobar", newRow, []string{"id", "created"})
 
 ### Update
 
-> ```go
-> Update(
->  	db *sqlx.DB,
->  	table string,
->  	model interface{},
->  	where string,
->  	excludedFields []string
-> ) (sql.Result, error) 
-> ```
+###### Interface
+```go
+Update(
+ 	db *sqlx.DB,
+ 	table string,
+ 	model interface{},
+ 	where string,
+ 	excludedFields []string
+) (sql.Result, error) 
+```
 
 ###### Example
 ```go
@@ -59,14 +62,14 @@ _, err = Update(db, "foobar", updatedRow, where, []string{"id", "created"})
 
 ### Fields
 
-> ```go
-> Fields(
->   values interface{}
-> ) []string
-> ```
+###### Interface
+```go
+Fields(
+  values interface{}
+) []string
+```
 
 ###### Example
-
 ```go
 fields := Fields(model)
 ```
@@ -76,7 +79,6 @@ fields := Fields(model)
 `ezsqlx.ConnectionSettings` abstracts away basic Postgres connection operations. Check `connections.go` for a full list of helpers.
 
 ###### Example
-
 ```go
 cs := &ConnectionSettings{
   Host: "localhost",
