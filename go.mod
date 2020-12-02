@@ -8,6 +8,6 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/ory/dockertest/v3 v3.6.2
 	github.com/stretchr/testify v1.6.1
-	github.com/tovala/go-helpers v0.0.0-20201120195756-bba3b5157228
+	github.com/tovala/go-helpers v0.0.1
 	google.golang.org/appengine v1.6.7 // indirect
 )
