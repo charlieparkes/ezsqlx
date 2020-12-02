@@ -39,7 +39,7 @@ func TestUpdate(t *testing.T) {
 	foobar.Message = "pc master race"
 	foobar.Flip = true
 
-	_, err = Update(db, "foobar", foobar, fmt.Sprintf("id=%v",foobar.Id), []string{"id", "created"})
+	_, err = Update(db, "foobar", foobar, fmt.Sprintf("id=%v", foobar.Id), []string{"id", "created"})
 	assert.Nil(t, err)
 
 	updatedFoobar := &test.FooBar{}
