@@ -52,9 +52,9 @@ func (settings *ConnectionSettings) Init() *sqlx.DB {
 		log.Fatal(fmt.Sprintf("Could not connect to or ping database '%v': %v", settings.Database, settings.String()))
 	}
 
-	if (settings.MaxOpenConns > 0 {
+	if settings.MaxOpenConns > 0 {
 		db.SetMaxOpenConns(settings.MaxOpenConns)
-	})
+	}
 
 	return db
 }
