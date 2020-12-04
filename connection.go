@@ -52,9 +52,9 @@ func (settings *ConnectionSettings) Init() *sqlx.DB {
 		log.Fatal(fmt.Sprintf("Could not connect to or ping database '%v': %v", settings.Database, settings.String()))
 	}
 
-	// Setting these arbitrarily to 50. We need to set a MaxOpenConns here since Oatmeal
-	// uses channels during OrderProcessing and we don't want to hit any connection limits.
-	db.SetMaxOpenConns(settings.MaxOpenConns)
+	if (settings.MaxOpenConns > 0 {
+		db.SetMaxOpenConns(settings.MaxOpenConns)
+	})
 
 	return db
 }
