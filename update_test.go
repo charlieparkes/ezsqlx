@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/tovala/ezsqlx/test"
+	"github.com/charlieparkes/ezsqlx/test"
 )
 
 func TestUpdate(t *testing.T) {

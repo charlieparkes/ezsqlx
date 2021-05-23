@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charlieparkes/go-helpers"
 	"github.com/jmoiron/sqlx"
-	"github.com/tovala/go-helpers"
 )
 
 func Update(db *sqlx.DB, table string, model interface{}, where string, excludedFields []string) (sql.Result, error) {

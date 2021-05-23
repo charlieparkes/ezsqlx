@@ -3,8 +3,8 @@ package ezsqlx
 import (
 	"strings"
 
+	"github.com/charlieparkes/go-helpers"
 	"github.com/jmoiron/sqlx"
-	"github.com/tovala/go-helpers"
 )
 
 func Insert(db *sqlx.DB, table string, model interface{}, excludedFields []string) (*sqlx.Rows, error) {
