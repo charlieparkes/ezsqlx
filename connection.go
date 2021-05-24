@@ -54,17 +54,18 @@ func (cs *ConnectionSettings) Open() (*sqlx.DB, error) {
 	return sqlx.Open(cs.getDriver(), cs.String())
 }
 
-func (cs *ConnectionSettings) Init() *sqlx.DB {
+func (cs *ConnectionSettings) Init() (*sqlx.DB, error) {
 	db, err := cs.Connect()
 	if err != nil {
 		log.Fatal(fmt.Sprintf("could not connect to or ping database '%v': %v", cs.Database, cs.String()))
+		return nil, err
 	}
 
 	if cs.MaxOpenConns > 0 {
 		db.SetMaxOpenConns(cs.MaxOpenConns)
 	}
 
-	return db
+	return db, nil
 }
 
 func (cs *ConnectionSettings) Ping() error {
