@@ -14,7 +14,7 @@ func Update(db *sqlx.DB, table string, model interface{}, where string, excluded
 	quotedFields := helpers.WrapStrings(fields, "\"")
 	namedFields := helpers.PrependStrings(fields, ":")
 	updateFields := []string{}
-	for i, _ := range fields {
+	for i := range fields {
 		updateFields = append(updateFields, fmt.Sprintf("%v=%v", quotedFields[i], namedFields[i]))
 	}
 	sql := "UPDATE " + table + " SET " + strings.Join(updateFields, ", ") + " WHERE " + where

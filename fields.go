@@ -26,5 +26,5 @@ func Fields(values interface{}) []string {
 		}
 		return fields
 	}
-	panic(fmt.Errorf("Requires a struct or a map, found: %s", v.Kind().String()))
+	panic(fmt.Errorf("requires a struct or a map, found: %s", v.Kind().String()))
 }

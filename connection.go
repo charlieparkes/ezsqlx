@@ -1,7 +1,6 @@
 package ezsqlx
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -10,6 +9,7 @@ import (
 )
 
 type ConnectionSettings struct {
+	Driver       string
 	Host         string
 	Port         string
 	User         string
@@ -19,77 +19,60 @@ type ConnectionSettings struct {
 	MaxOpenConns int
 }
 
-func (settings *ConnectionSettings) String() string {
+func (cs *ConnectionSettings) String() string {
 	sslmode := "require"
-	if settings.DisableSSL {
+	if cs.DisableSSL {
 		sslmode = "disable"
 	}
 	return fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v",
-		settings.Host,
-		settings.Port,
-		settings.User,
-		settings.Password,
-		settings.Database,
+		cs.Host,
+		cs.Port,
+		cs.User,
+		cs.Password,
+		cs.Database,
 		sslmode,
 	)
 }
 
-func (settings *ConnectionSettings) Copy() *ConnectionSettings {
-	cs := *settings
-	return &cs
+func (cs *ConnectionSettings) Copy() *ConnectionSettings {
+	s := *cs
+	return &s
 }
 
-func (settings *ConnectionSettings) Connect() (*sqlx.DB, error) {
-	return sqlx.Connect("pgx", settings.String())
+func (cs *ConnectionSettings) getDriver() string {
+	if cs.Driver == "" {
+		return "pgx"
+	}
+	return cs.Driver
 }
 
-func (settings *ConnectionSettings) Open() (*sqlx.DB, error) {
-	return sqlx.Open("pgx", settings.String())
+func (cs *ConnectionSettings) Connect() (*sqlx.DB, error) {
+	return sqlx.Connect(cs.getDriver(), cs.String())
 }
 
-func (settings *ConnectionSettings) Init() *sqlx.DB {
-	db, err := settings.Connect()
+func (cs *ConnectionSettings) Open() (*sqlx.DB, error) {
+	return sqlx.Open(cs.getDriver(), cs.String())
+}
+
+func (cs *ConnectionSettings) Init() *sqlx.DB {
+	db, err := cs.Connect()
 	if err != nil {
-		log.Fatal(fmt.Sprintf("Could not connect to or ping database '%v': %v", settings.Database, settings.String()))
+		log.Fatal(fmt.Sprintf("could not connect to or ping database '%v': %v", cs.Database, cs.String()))
 	}
 
-	if settings.MaxOpenConns > 0 {
-		db.SetMaxOpenConns(settings.MaxOpenConns)
+	if cs.MaxOpenConns > 0 {
+		db.SetMaxOpenConns(cs.MaxOpenConns)
 	}
 
 	return db
 }
 
-func (settings *ConnectionSettings) Ping() error {
+func (cs *ConnectionSettings) Ping() error {
 	var err error
-	db, err := settings.Open()
-	defer db.Close()
+	db, err := cs.Open()
 	if err != nil {
-		return errors.New(fmt.Sprintf("Could not connect to %v: %v", settings.Host, err))
+		return fmt.Errorf("could not connect to %v: %v", cs.Host, err)
 	}
+	defer db.Close()
 	return db.Ping()
-}
-
-// Initialize databases given ConnectionStrings
-func InitConnections(databases map[string]*ConnectionSettings) (map[string]*sqlx.DB, func() error) {
-	connections := map[string]*sqlx.DB{}
-
-	for name, settings := range databases {
-		connections[name] = settings.Init()
-	}
-
-	return connections, func() error {
-		return CloseAll(connections)
-	}
-}
-
-func CloseAll(connections map[string]*sqlx.DB) error {
-	var err error
-	for name, db := range connections {
-		err = db.Close()
-		if err != nil {
-			log.Fatal(fmt.Sprintf("Could not close %v database: %v", name, err))
-		}
-	}
-	return err
 }
