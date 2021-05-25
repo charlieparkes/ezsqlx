@@ -4,9 +4,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/charlieparkes/ezsqlx/test"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInsert(t *testing.T) {
@@ -38,4 +37,26 @@ func TestInsert(t *testing.T) {
 	assert.Equal(t, 1, foobar.Id)
 	assert.Equal(t, "confused unga bunga", foobar.Message)
 	assert.Equal(t, false, foobar.Flip)
+}
+
+func TestInsertQuery(t *testing.T) {
+	type testModel struct {
+		Foo     string `constraint:"pk"`
+		Bar     int    `db:"barry"`
+		WizBang bool
+	}
+
+	sql := InsertQuery("my_table", testModel{})
+	assert.Equal(t, "INSERT INTO my_table (\"foo\", \"barry\", \"wiz_bang\") VALUES (:foo, :barry, :wiz_bang)", sql)
+}
+
+func TestUpsertQuery(t *testing.T) {
+	type testModel struct {
+		Foo     string `constraint:"pk"`
+		Bar     int    `db:"barry"`
+		WizBang bool
+	}
+
+	sql := UpsertQuery("my_table", testModel{}, "my_table_pk")
+	assert.Equal(t, "INSERT INTO my_table (\"foo\", \"barry\", \"wiz_bang\") VALUES (:foo, :barry, :wiz_bang) ON CONFLICT ON CONSTRAINT my_table_pk DO UPDATE SET barry = EXCLUDED.barry, wiz_bang = EXCLUDED.wiz_bang", sql)
 }

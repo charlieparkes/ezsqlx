@@ -1,30 +1,33 @@
 package ezsqlx
 
 import (
-	"fmt"
 	"reflect"
 )
 
-func Fields(values interface{}) []string {
-	v := reflect.ValueOf(values)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
+func Columns(sf []reflect.StructField) []string {
 	fields := []string{}
-	if v.Kind() == reflect.Struct {
-		for i := 0; i < v.NumField(); i++ {
-			field := v.Type().Field(i).Tag.Get("db")
-			if field != "" {
-				fields = append(fields, field)
+	for _, f := range sf {
+		if tag := f.Tag.Get("db"); tag == "-" {
+			continue
+		} else if tag == "" {
+			fields = append(fields, snakeCase(f.Name))
+		} else {
+			fields = append(fields, tag)
+		}
+	}
+	return fields
+}
+
+func primaryKey(sf []reflect.StructField) []string {
+	fields := []string{}
+	for _, f := range sf {
+		if f.Tag.Get("constraint") == "pk" {
+			name := f.Tag.Get("db")
+			if name == "" {
+				name = snakeCase(f.Name)
 			}
+			fields = append(fields, name)
 		}
-		return fields
 	}
-	if v.Kind() == reflect.Map {
-		for _, keyv := range v.MapKeys() {
-			fields = append(fields, keyv.String())
-		}
-		return fields
-	}
-	panic(fmt.Errorf("requires a struct or a map, found: %s", v.Kind().String()))
+	return fields
 }
